@@ -1,0 +1,150 @@
+-- Active: 1760505534840@@127.0.0.1@5432@postgres
+-- Active: 1758948735459@@127.0.0.1@3306
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATM Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a1a1a;
+      color: #00ffcc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .atm {
+      background: #111;
+      padding: 20px;
+      border-radius: 15px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+    input, button, select {
+      margin: 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #00ffcc;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00d4aa;
+    }
+    #output {
+      background: black;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 8px;
+      min-height: 100px;
+      text-align: left;
+      margin-top: 10px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="atm">
+    <h2>💳 ATM Simulator</h2>
+    <div id="menuAwal">
+      <p>Masukkan PIN:</p>
+      <input type="password" id="pinInput" placeholder="PIN" />
+      <button onclick="cekPIN()">Submit</button>
+    </div>
+
+    <div id="menuUtama" style="display:none;">
+      <h3>Pilih Menu</h3>
+      <button onclick="cekSaldo()">Cek Saldo</button>
+      <button onclick="tarikTunai()">Tarik Tunai</button>
+      <button onclick="kirimTunai()">Kirim Tunai</button>
+      <button onclick="keluar()">Keluar</button>
+    </div>
+
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const PIN = 112233;
+    let saldoAtm = 10000000;
+    let percobaan = 0;
+    const max = 3;
+    const nama = "Keno";
+
+    const output = document.getElementById("output");
+    const menuAwal = document.getElementById("menuAwal");
+    const menuUtama = document.getElementById("menuUtama");
+
+    function tampilkan(teks) {
+      output.innerHTML += teks + "<br>";
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function cekPIN() {
+      const pin = parseInt(document.getElementById("pinInput").value);
+      if (pin === PIN) {
+        tampilkan("PIN benar. Selamat datang, " + nama + "!");
+        menuAwal.style.display = "none";
+        menuUtama.style.display = "block";
+      } else {
+        percobaan++;
+        tampilkan("PIN salah! Percobaan: " + percobaan);
+        if (percobaan >= max) {
+          tampilkan("<b>Kartu terblokir.</b>");
+          document.getElementById("pinInput").disabled = true;
+        }
+      }
+    }
+
+    function cekSaldo() {
+      tampilkan(`Saldo Anda: Rp${saldoAtm.toLocaleString("id-ID")}`);
+    }
+
+    function tarikTunai() {
+      const jumlah = parseInt(prompt("Masukkan nominal penarikan: "));
+      if (isNaN(jumlah) || jumlah <= 0) {
+        tampilkan("Nominal tidak valid.");
+        return;
+      }
+      if (jumlah > saldoAtm) {
+        tampilkan("Saldo tidak mencukupi!");
+      } else {
+        saldoAtm -= jumlah;
+        tampilkan(`Berhasil menarik Rp${jumlah.toLocaleString("id-ID")}.`);
+        tampilkan(`Sisa saldo: Rp${saldoAtm.toLocaleString("id-ID")}`);
+      }
+    }
+
+    function kirimTunai() {
+      const bank = prompt("Masukkan nama bank tujuan:");
+      const rek = prompt("Masukkan nomor rekening tujuan:");
+      const nominal = parseInt(prompt("Masukkan nominal transfer: "));
+      if (isNaN(nominal) || nominal <= 0) {
+        tampilkan("Nominal tidak valid.");
+        return;
+      }
+      if (nominal > saldoAtm) {
+        tampilkan("Saldo tidak mencukupi!");
+      } else {
+        saldoAtm -= nominal;
+        tampilkan(`Transfer ke ${bank} - Rek ${rek} sebesar Rp${nominal.toLocaleString("id-ID")} BERHASIL.`);
+        tampilkan(`Sisa saldo: Rp${saldoAtm.toLocaleString("id-ID")}`);
+      }
+    }
+
+    function keluar() {
+      tampilkan("Terima kasih telah menggunakan ATM kami!");
+      menuUtama.style.display = "none";
+      menuAwal.style.display = "block";
+      document.getElementById("pinInput").value = "";
+    }
+  </script>
+</body>
+</html>
