@@ -10,10 +10,10 @@ function tanya(pertanyaan){
 }
 
 const inventarisGudangAwal = [
-    { id: "B001", nama: "Buku ", stok: 150, harga: 5000 },
+    { id: "B001", nama: "Buku", stok: 150, harga: 5000 },
     { id: "P002", nama: "Pulpen", stok: 200, harga: 3000 },
     { id: "B003", nama: "Buku Gambar", stok: 80, harga: 8000 },
-    { id: "P004", nama: "Pensil Warna", stok: 120, harga: 12000 }
+    { id: "P004", nama: "Pensil Warna baru", stok: 120, harga: 12000 }
   ];
 
   async function tambahBarang() {
